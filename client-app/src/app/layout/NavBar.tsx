@@ -1,19 +1,19 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Button, Container, Menu } from "semantic-ui-react";
+import { Button, Container, Menu, } from "semantic-ui-react";
 
 export default function NavBar() {
+    
     return (
         <Menu inverted fixed='top'>
             <Container>
-                <Menu.Item as={NavLink} to = '/' exact header>
-                    <img src="/assets/logo.png" alt="logo" style={{marginRight: '750px'}}/>
-                Fluturimet
+                <Menu.Item as={NavLink} to='/' exact header>
+                    <img src="/assets/logo.png" alt="logo" style={{marginRight: '10px'}} />
+                AirKosova
             </Menu.Item>
-
-            <Menu.Item as={NavLink} to='/activities' name ='Fluturimi'/>
+            <Menu.Item as={NavLink} to='/activities' name='Fluturimi' />
             <Menu.Item>
-               <Button as={NavLink} to='/createActivity' positive content='Shto Fluturimin'/> 
+               <Button as={NavLink} to='/createActivity' positive content='Shto Fluturimin' /> 
             </Menu.Item>
             </Container>
         </Menu>
