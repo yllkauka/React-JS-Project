@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Activity } from './../models/activity';
+import { Activity } from "../models/activity";
+import { format } from 'date-fns';
 
 export default class ActivityStore {
     activityRegistry = new Map<string, Activity>();
@@ -11,35 +12,35 @@ export default class ActivityStore {
 
     constructor() {
         makeAutoObservable(this)
+
+    }
+
+    get activitiesByDate() {
+        return Array.from(this.activityRegistry.values()).sort((a, b) =>
+            a.date!.getTime() - b.date!.getTime());
     }
 
     get groupedActivities() {
         return Object.entries(
             this.activitiesByDate.reduce((activities, activity) => {
-                const date = activity.date;
+                const date = format(activity.date!, 'dd MMM yyyy');
                 activities[date] = activities[date] ? [...activities[date], activity] : [activity];
                 return activities;
-            }, {} as {[key: string]: Activity[]})
+            }, {} as { [key: string]: Activity[] })
         )
     }
-
-    get activitiesByDate() {
-        return Array.from(this.activityRegistry.values()).sort((a, b) => 
-            Date.parse(a.date) - Date.parse(b.date));
-    }
-
     loadActivities = async () => {
         this.loadingInitial = true;
         try {
             const activities = await agent.Activities.list();
             activities.forEach(activity => {
-                activity.date = activity.date.split('T')[0];
-                this.setActivity(activity)
-                this.activityRegistry.set(activity.id, activity);
+                this.setActivity(activity);
+
             })
             this.setLoadingInitial(false);
+
         } catch (error) {
-            console.log(error)
+            console.log(error);
             this.setLoadingInitial(false);
         }
     }
@@ -65,34 +66,39 @@ export default class ActivityStore {
             }
 
         }
-    }  
+    }
 
     private setActivity = (activity: Activity) => {
-        activity.date = activity.date.split('T')[0];
+        activity.date = new Date(activity.date!);
         this.activityRegistry.set(activity.id, activity);
+
     }
 
     private getActivity = (id: string) => {
         return this.activityRegistry.get(id);
     }
 
+
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
     }
+
+
 
     createActivity = async (activity: Activity) => {
         this.loading = true;
         try {
             await agent.Activities.create(activity);
-            runInAction (() => {
-                this.activityRegistry.set(activity.id, activity);      //qitu ja heka ; edhe bani, po nvideo osht me ; tash mbani me ; 
+            runInAction(() => {
+                this.activityRegistry.set(activity.id, activity)
                 this.selectedActivity = activity;
                 this.editMode = false;
                 this.loading = false;
             })
+
         } catch (error) {
             console.log(error);
-            runInAction (() => {
+            runInAction(() => {
                 this.loading = false;
             })
         }
@@ -100,15 +106,15 @@ export default class ActivityStore {
 
     updateActivity = async (activity: Activity) => {
         this.loading = true;
-
         try {
             await agent.Activities.update(activity);
             runInAction(() => {
                 this.activityRegistry.set(activity.id, activity);
                 this.selectedActivity = activity;
                 this.editMode = false;
-                this.loading = false; 
+                this.loading = false;
             })
+
         } catch (error) {
             console.log(error);
             runInAction(() => {
@@ -116,21 +122,21 @@ export default class ActivityStore {
             })
         }
     }
-
     deleteActivity = async (id: string) => {
         this.loading = true;
-        
         try {
+
             await agent.Activities.delete(id);
             runInAction(() => {
                 this.activityRegistry.delete(id);
                 this.loading = false;
             })
-        } catch (error){
+        } catch (error) {
             console.log(error);
-            runInAction (() => {
+            runInAction(() => {
                 this.loading = false;
             })
+
         }
     }
 }

@@ -2,6 +2,8 @@ import { observer } from 'mobx-react-lite';
 import React from 'react'
 import {Segment, Grid, Icon} from 'semantic-ui-react'
 import {Activity} from "../../../app/models/activity";
+import {format} from 'date-fns';
+
 
 interface Props {
     activity: Activity
@@ -13,7 +15,7 @@ export default observer(function ActivityDetailedInfo({activity}: Props) {
             <Segment attached='top'>
                 <Grid>
                     <Grid.Column width={1}>
-                        <Icon size='large' color='teal' name='info'/>
+                        <Icon size='large' color='green' name='info'/>
                     </Grid.Column>
                     <Grid.Column width={15}>
                         <p>{activity.description}</p>
@@ -23,11 +25,11 @@ export default observer(function ActivityDetailedInfo({activity}: Props) {
             <Segment attached>
                 <Grid verticalAlign='middle'>
                     <Grid.Column width={1}>
-                        <Icon name='calendar' size='large' color='teal'/>
+                        <Icon name='calendar' size='large' color='green'/>
                     </Grid.Column>
                     <Grid.Column width={15}>
             <span>
-              {activity.date}
+              {format(activity.date!, 'dd MMM yyyy h:mm aa')}
             </span>
                     </Grid.Column>
                 </Grid>
@@ -35,7 +37,7 @@ export default observer(function ActivityDetailedInfo({activity}: Props) {
             <Segment attached>
                 <Grid verticalAlign='middle'>
                     <Grid.Column width={1}>
-                        <Icon name='marker' size='large' color='teal'/>
+                        <Icon name='marker' size='large' color='green'/>
                     </Grid.Column>
                     <Grid.Column width={11}>
                         <span>{activity.venue}, {activity.city}</span>
