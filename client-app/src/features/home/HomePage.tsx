@@ -12,12 +12,12 @@ export default observer(function HomePage() {
 <Segment inverted textAlign='center' vertical className='masthead'>
     <Container text>
         <Header as='h1' inverted>
-            <Image size='massive' src='/assets/1.jpeg' alt='logo' style={{marginBottom:12}}/>
-       Aktivtietet
+            <Image size='massive' src='/assets/logo.png' alt='logo' style={{marginBottom:12}}/>
+       Air Kosova
       </Header>
       {userStore.isLoggendIn ? (
           <>
-         <Header as='h2' inverted content = 'Eja Shiko Aktivitetet' />
+         <Header as='h2' inverted content = 'Hyr ne AirKosova' />
          <Button as={Link} to='/activities' size='huge' inverted>
         Shiko me shume 
           </Button>
