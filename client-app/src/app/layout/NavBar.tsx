@@ -12,6 +12,7 @@ export default function NavBar() {
                 AirKosova
             </Menu.Item>
             <Menu.Item as={NavLink} to='/activities' name='Fluturimi' />
+            <Menu.Item as={NavLink} to='/errors' name='Errors' />
             <Menu.Item>
                <Button as={NavLink} to='/createActivity' positive content='Shto Fluturimin' /> 
             </Menu.Item>
